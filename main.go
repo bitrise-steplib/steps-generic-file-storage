@@ -147,7 +147,9 @@ func main() {
 		failf("Failed to fetch file list, error: %s", err)
 	}
 
-	log.Printf("  %s", files(fs))
+	if len(fs) > 0 {
+		log.Printf("  %s", files(fs))
+	}
 	log.Donef("- Done")
 
 	fmt.Println()
