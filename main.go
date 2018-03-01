@@ -29,7 +29,7 @@ type files []file
 func (fs files) String() string {
 	fileNames := []string{}
 	for _, file := range fs {
-		fileNames = append(fileNames, file.Name)
+		fileNames = append(fileNames, fmt.Sprintf("$%s/%s", envKey, file.Name))
 	}
 	return strings.Join(fileNames, "\n  ")
 }
