@@ -49,39 +49,13 @@ is_always_run: false
 is_skippable: false
 run_if: ""
 
-deps:
-  brew:
-  - name: git
-  - name: wget
-  apt_get:
-  - name: git
-  - name: wget
-
-
 toolkit:
   go:
     package_name: github.com/bitrise-steplib/steps-generic-file-storage
 
-
-inputs:
-  - example_step_input: Default Value - you can leave this empty if you want to
-    opts:
-      title: "Example Step Input"
-      summary: Summary. No more than 2-3 sentences.
-      description: |
-        Description of this input.
-
-        Can be Markdown formatted text.
-      is_expand: true
-      is_required: true
-      value_options: []
-
 outputs:
-  - EXAMPLE_STEP_OUTPUT:
+  - GENERIC_FILE_STORAGE:
     opts:
-      title: "Example Step Output"
-      summary: Summary. No more than 2-3 sentences.
-      description: |
-        Description of this output.
-
-        Can be Markdown formatted text.
+      title: "Generic File Storage Path"
+      summary: Path to the files in Generic File Storage.
+      description: Path to the files in Generic File Storage.
