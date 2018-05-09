@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -35,6 +36,10 @@ func (fs files) String() string {
 }
 
 func main() {
+	if os.Getenv("ENABLE_DEBUG") == "true" {
+		log.SetEnableDebugLog(true)
+	}
+
 	log.Infof("Create Storage dir:")
 
 	storageDir, err := getStorageTempDirPath()
@@ -50,7 +55,6 @@ func main() {
 	log.Donef("- Done")
 
 	fmt.Println()
-
 	log.Infof("Parsing Generic Storage Files:")
 
 	fs, err := getFiles()
@@ -58,21 +62,23 @@ func main() {
 		failf("Failed to fetch file list, error: %s", err)
 	}
 
+	log.Debugf("Files to download:")
+	logDebugPretty(fs)
+
 	if len(fs) > 0 {
 		log.Printf("  %s", files(fs))
 	}
 	log.Donef("- Done")
 
 	fmt.Println()
-
 	log.Infof("Downloading %d files:", len(fs))
+
 	started := time.Now()
-	err = downloadFiles(storageDir, fs)
-	if err != nil {
+	if err := downloadFiles(storageDir, fs); err != nil {
 		failf("Failed to download files, error: %s", err)
 	}
-	log.Printf("  Took: %s", time.Since(started))
 
+	log.Printf("  Took: %s", time.Since(started))
 	log.Donef("- Done")
 }
 
@@ -118,7 +124,7 @@ func getFiles() ([]file, error) {
 	return files, nil
 }
 
-func downloadFile(filepath string, url string) error {
+func downloadFile(filepath string, url string) (err error) {
 	// Create the file
 	out, err := os.Create(filepath)
 	if err != nil {
@@ -170,6 +176,15 @@ func downloadFiles(path string, files []file) error {
 		}
 	}
 	return nil
+}
+
+func logDebugPretty(v interface{}) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	log.Debugf("%+v\n", string(b))
 }
 
 func failf(f string, args ...interface{}) {
