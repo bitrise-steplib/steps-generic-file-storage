@@ -13,7 +13,7 @@ app:
 workflows:
   test:
     envs:
-    - BITRISEIO_CODESIGNDOC_URL: https://raw.githubusercontent.com/bitrise-tools/codesigndoc/master/_scripts/install_wrap.sh
+    - BITRISEIO_SAMPLE_FILE_URL: https://raw.githubusercontent.com/bitrise-tools/codesigndoc/master/_scripts/install_wrap.sh
     before_run:
     - audit-this-step
     steps:

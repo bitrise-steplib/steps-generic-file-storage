@@ -51,6 +51,10 @@ func main() {
 		failf("Failed to export path: %s to the env: %s, error: %s", storageDir, envKey, err)
 	}
 
+	if err := tools.ExportEnvironmentWithEnvman("GENERIC_FILE_STORAGE", storageDir); err != nil {
+		failf("Failed to export GENERIC_FILE_STORAGE, error: %s", err)
+	}
+
 	log.Printf("  %s: %s", envKey, storageDir)
 	log.Donef("- Done")
 
