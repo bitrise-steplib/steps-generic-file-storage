@@ -36,7 +36,7 @@ func (fs files) String() string {
 }
 
 func main() {
-	if os.Getenv("ENABLE_DEBUG") == "true" {
+	if os.Getenv("enable_debug") == "true" {
 		log.SetEnableDebugLog(true)
 	}
 
@@ -49,10 +49,6 @@ func main() {
 
 	if err := tools.ExportEnvironmentWithEnvman(envKey, storageDir); err != nil {
 		failf("Failed to export path: %s to the env: %s, error: %s", storageDir, envKey, err)
-	}
-
-	if err := tools.ExportEnvironmentWithEnvman("GENERIC_FILE_STORAGE", storageDir); err != nil {
-		failf("Failed to export GENERIC_FILE_STORAGE, error: %s", err)
 	}
 
 	log.Printf("  %s: %s", envKey, storageDir)
@@ -128,7 +124,7 @@ func getFiles() ([]file, error) {
 	return files, nil
 }
 
-func downloadFile(filepath string, url string) (err error) {
+func downloadFile(filepath string, url string) error {
 	// Create the file
 	out, err := os.Create(filepath)
 	if err != nil {
@@ -137,8 +133,8 @@ func downloadFile(filepath string, url string) (err error) {
 
 	defer func() {
 		cerr := out.Close()
-		if err == nil {
-			err = cerr
+		if cerr != nil {
+			log.Errorf("Error during closing the output: %s", cerr)
 		}
 	}()
 
@@ -150,8 +146,8 @@ func downloadFile(filepath string, url string) (err error) {
 
 	defer func() {
 		cerr := resp.Body.Close()
-		if err == nil {
-			err = cerr
+		if cerr != nil {
+			log.Errorf("Error during closing the response body: %s", cerr)
 		}
 	}()
 

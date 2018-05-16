@@ -8,8 +8,6 @@ app:
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/bitrise-steplib/steps-generic-file-storage.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
 
-  - ENABLE_DEBUG: false
-
 workflows:
   test:
     envs:
