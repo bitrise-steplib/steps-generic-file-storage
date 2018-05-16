@@ -41,22 +41,34 @@ workflows:
 
   # ----------------------------------------------------------------
   # --- Utility workflows
+
   dep-update:
-    title: Godeps update
+    title: Dep update
     description: |
-      Used for updating bitrise dependencies with godep
+      Used for updating bitrise dependencies with dep
     steps:
     - script:
         title: Dependency update
         inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+            go get -u -v github.com/golang/dep/cmd/dep
+            dep ensure -v
+            dep ensure -v -update
+
+  # --- workflow to create Release version
+  create-release:
+    steps:
+    - script:
+        title:
+        inputs:
         - content: |
             #!/bin/bash
             set -ex
-            go get -u -v github.com/bitrise-tools/gows
-            go get -u -v github.com/golang/dep/cmd/dep
-            gows clear
-            gows dep ensure -v
-            gows dep ensure -v -update
+            go get -u github.com/bitrise-tools/releaseman
+            export CI=true
+            releaseman create --version "$BITRISE_STEP_VERSION"
             
   # ----------------------------------------------------------------
   # --- workflows to Share this step into a Step Library
