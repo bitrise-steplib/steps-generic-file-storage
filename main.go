@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -32,6 +33,53 @@ func (fs files) String() string {
 		fileNames = append(fileNames, fmt.Sprintf("$%s/%s", envKey, file.Name))
 	}
 	return strings.Join(fileNames, "\n  ")
+}
+
+func main() {
+	if os.Getenv("enable_debug") == "true" {
+		log.SetEnableDebugLog(true)
+	}
+
+	log.Infof("Create Storage dir:")
+
+	storageDir, err := getStorageTempDirPath()
+	if err != nil {
+		failf("Failed to create storage temp dir, error: %s", err)
+	}
+
+	if err := tools.ExportEnvironmentWithEnvman(envKey, storageDir); err != nil {
+		failf("Failed to export path: %s to the env: %s, error: %s", storageDir, envKey, err)
+	}
+
+	log.Printf("  %s: %s", envKey, storageDir)
+	log.Donef("- Done")
+
+	fmt.Println()
+	log.Infof("Parsing Generic Storage Files:")
+
+	fs, err := getFiles()
+	if err != nil {
+		failf("Failed to fetch file list, error: %s", err)
+	}
+
+	log.Debugf("Files to download:")
+	logDebugPretty(fs)
+
+	if len(fs) > 0 {
+		log.Printf("  %s", files(fs))
+	}
+	log.Donef("- Done")
+
+	fmt.Println()
+	log.Infof("Downloading %d files:", len(fs))
+
+	started := time.Now()
+	if err := downloadFiles(storageDir, fs); err != nil {
+		failf("Failed to download files, error: %s", err)
+	}
+
+	log.Printf("  Took: %s", time.Since(started))
+	log.Donef("- Done")
 }
 
 func isGenericKey(key string) bool {
@@ -82,14 +130,26 @@ func downloadFile(filepath string, url string) error {
 	if err != nil {
 		return err
 	}
-	defer out.Close()
+
+	defer func() {
+		cerr := out.Close()
+		if cerr != nil {
+			log.Errorf("Error during closing the output: %s", cerr)
+		}
+	}()
 
 	// Get the data
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+
+	defer func() {
+		cerr := resp.Body.Close()
+		if cerr != nil {
+			log.Errorf("Error during closing the response body: %s", cerr)
+		}
+	}()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -118,49 +178,16 @@ func downloadFiles(path string, files []file) error {
 	return nil
 }
 
+func logDebugPretty(v interface{}) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	log.Debugf("%+v\n", string(b))
+}
+
 func failf(f string, args ...interface{}) {
 	log.Errorf(f, args...)
 	os.Exit(1)
-}
-
-func main() {
-	log.Infof("Create Storage dir:")
-
-	storageDir, err := getStorageTempDirPath()
-	if err != nil {
-		failf("Failed to create storage temp dir, error: %s", err)
-	}
-
-	if err := tools.ExportEnvironmentWithEnvman(envKey, storageDir); err != nil {
-		failf("Failed to export path: %s to the env: %s, error: %s", storageDir, envKey, err)
-	}
-
-	log.Printf("  %s: %s", envKey, storageDir)
-	log.Donef("- Done")
-
-	fmt.Println()
-
-	log.Infof("Parsing Generic Storage Files:")
-
-	fs, err := getFiles()
-	if err != nil {
-		failf("Failed to fetch file list, error: %s", err)
-	}
-
-	if len(fs) > 0 {
-		log.Printf("  %s", files(fs))
-	}
-	log.Donef("- Done")
-
-	fmt.Println()
-
-	log.Infof("Downloading %d files:", len(fs))
-	started := time.Now()
-	err = downloadFiles(storageDir, fs)
-	if err != nil {
-		failf("Failed to download files, error: %s", err)
-	}
-	log.Printf("  Took: %s", time.Since(started))
-
-	log.Donef("- Done")
 }
