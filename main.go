@@ -82,6 +82,10 @@ func main() {
 	log.Donef("- Done")
 }
 
+func isRepositoryUrl(key string) bool {
+	return strings.Compare(key, "BITRISEIO_PULL_REQUEST_REPOSITORY_URL") == 0
+}
+
 func isGenericKey(key string) bool {
 	return strings.HasPrefix(key, "BITRISEIO_") && strings.HasSuffix(key, "_URL")
 }
@@ -109,6 +113,10 @@ func getFiles() ([]file, error) {
 	for _, env := range os.Environ() {
 		key, value := splitEnv(env)
 
+		if isRepositoryUrl(key) {
+			continue	
+		}
+		
 		if !isGenericKey(key) {
 			continue
 		}
