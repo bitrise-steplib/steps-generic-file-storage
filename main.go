@@ -26,7 +26,7 @@ func getFiles() ([]file, error) {
 	for _, env := range os.Environ() {
 		key, value := splitEnv(env)
 
-		if !isGenericKey(key) {
+		if !isGenericKey(key) || isIgnoredKey(key) {
 			continue
 		}
 
