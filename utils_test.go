@@ -57,7 +57,7 @@ func Test_isGenericKey(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "NOT Generic_2",
+			name: "NOT Generic_3",
 			key:  "PULL_REQUEST_REPOSITORY_URL",
 			want: false,
 		},
