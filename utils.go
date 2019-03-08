@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 
@@ -30,4 +32,13 @@ func splitEnv(env string) (string, string) {
 func failf(f string, args ...interface{}) {
 	log.Errorf(f, args...)
 	os.Exit(1)
+}
+
+func logDebugPretty(v interface{}) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+
+	log.Debugf("%v\n", string(b))
 }

@@ -123,7 +123,7 @@ func main() {
 	}
 
 	log.Debugf("Files to download:")
-	// logDebugPretty(fs) // TODO: use the pretty.go package instead
+	logDebugPretty(fs)
 
 	if len(fs) > 0 {
 		log.Printf("  %s", files(fs))
