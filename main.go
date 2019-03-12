@@ -18,12 +18,12 @@ import (
 const genericFileStorageEnv = "GENERIC_FILE_STORAGE"
 
 func getStorageTempDirPath() (string, error) {
-	return pathutil.NormalizedOSTempDirPath("_GENERIC_FILE_STORAGE_")
+	return pathutil.NormalizedOSTempDirPath(genericFileStorageEnv)
 }
 
-func getFiles() ([]file, error) {
+func getFiles(envs []string) (files, error) {
 	var files []file
-	for _, env := range os.Environ() {
+	for _, env := range envs {
 		key, value := splitEnv(env)
 
 		if !isGenericKey(key) || isIgnoredKey(key) {
@@ -122,7 +122,7 @@ func main() {
 	fmt.Println()
 	log.Infof("Parsing Generic Storage Files:")
 
-	fs, err := getFiles()
+	fs, err := getFiles(os.Environ())
 	if err != nil {
 		failf("Failed to fetch file list, error: %s", err)
 	}
