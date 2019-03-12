@@ -15,7 +15,7 @@ import (
 	"github.com/bitrise-tools/go-steputils/tools"
 )
 
-const envKey = "GENERIC_FILE_STORAGE"
+const genericFileStorageEnv = "GENERIC_FILE_STORAGE"
 
 func getStorageTempDirPath() (string, error) {
 	return pathutil.NormalizedOSTempDirPath("_GENERIC_FILE_STORAGE_")
@@ -112,11 +112,11 @@ func main() {
 		failf("Failed to create storage temp dir, error: %s", err)
 	}
 
-	if err := tools.ExportEnvironmentWithEnvman(envKey, storageDir); err != nil {
-		failf("Failed to export path: %s to the env: %s, error: %s", storageDir, envKey, err)
+	if err := tools.ExportEnvironmentWithEnvman(genericFileStorageEnv, storageDir); err != nil {
+		failf("Failed to export path: %s to the env: %s, error: %s", storageDir, genericFileStorageEnv, err)
 	}
 
-	log.Printf("  %s: %s", envKey, storageDir)
+	log.Printf("  %s: %s", genericFileStorageEnv, storageDir)
 	log.Donef("- Done")
 
 	fmt.Println()

@@ -17,7 +17,7 @@ type files []file
 // String returns env key and the file name pairs separated by new line
 func (fs files) String() (fileNames string) {
 	for _, file := range fs {
-		fileNames += fmt.Sprintf("$%s/%s\n  ", envKey, file.Name)
+		fileNames += fmt.Sprintf("$%s/%s\n  ", genericFileStorageEnv, file.Name)
 	}
 	return strings.TrimRight(fileNames, "\n  ")
 }
