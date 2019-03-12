@@ -14,12 +14,11 @@ type file struct {
 
 type files []file
 
-func (fs files) String() string {
-	fileNames := []string{}
+func (fs files) String() (fileNames string) {
 	for _, file := range fs {
-		fileNames = append(fileNames, fmt.Sprintf("$%s/%s", envKey, file.Name))
+		fileNames += fmt.Sprintf("$%s/%s\n  ", envKey, file.Name)
 	}
-	return strings.Join(fileNames, "\n  ")
+	return strings.TrimRight(fileNames, "\n  ")
 }
 
 func urlToFile(urlStr string) (file, error) {
