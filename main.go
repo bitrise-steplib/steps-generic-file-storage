@@ -95,6 +95,11 @@ func downloadFiles(path string, files []file) error {
 	return nil
 }
 
+func failf(f string, args ...interface{}) {
+	log.Errorf(f, args...)
+	os.Exit(1)
+}
+
 func main() {
 	if os.Getenv("enable_debug") == "true" {
 		log.SetEnableDebugLog(true)

@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/bitrise-io/go-utils/log"
@@ -27,11 +26,6 @@ func isIgnoredKey(key string) bool {
 func splitEnv(env string) (string, string) {
 	e := strings.Split(env, "=")
 	return e[0], strings.Join(e[1:], "=")
-}
-
-func failf(f string, args ...interface{}) {
-	log.Errorf(f, args...)
-	os.Exit(1)
 }
 
 func logDebugPretty(v interface{}) {
