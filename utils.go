@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/bitrise-io/go-utils/log"
+	"github.com/bitrise-io/go-utils/sliceutil"
 )
 
 func isGenericKey(key string) bool {
@@ -14,17 +15,15 @@ func isGenericKey(key string) bool {
 
 func isIgnoredKey(key string) bool {
 	ignoredKeys := []string{"BITRISEIO_PULL_REQUEST_REPOSITORY_URL"}
-
-	for _, ignoredKey := range ignoredKeys {
-		if key == ignoredKey {
-			return true
-		}
-	}
-	return false
+	return sliceutil.IsStringInSlice(key, ignoredKeys)
 }
 
 func splitEnv(env string) (string, string) {
 	e := strings.Split(env, "=")
+
+	if len(e) == 0 {
+		return e[0], "="
+	}
 	return e[0], strings.Join(e[1:], "=")
 }
 
