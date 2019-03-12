@@ -17,10 +17,6 @@ import (
 
 const genericFileStorageEnv = "GENERIC_FILE_STORAGE"
 
-func getStorageTempDirPath() (string, error) {
-	return pathutil.NormalizedOSTempDirPath(genericFileStorageEnv)
-}
-
 func getFiles(envs []string) (files, error) {
 	var files []file
 	for _, env := range envs {
@@ -105,9 +101,9 @@ func main() {
 		log.SetEnableDebugLog(true)
 	}
 
-	log.Infof("Create Storage dir:")
+	log.Infof("Create storage dir:")
 
-	storageDir, err := getStorageTempDirPath()
+	storageDir, err := pathutil.NormalizedOSTempDirPath(genericFileStorageEnv)
 	if err != nil {
 		failf("Failed to create storage temp dir, error: %s", err)
 	}
