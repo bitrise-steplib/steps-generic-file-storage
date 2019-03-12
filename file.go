@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"net/url"
+	neturl "net/url"
 	"path/filepath"
 	"strings"
 )
@@ -21,14 +21,14 @@ func (fs files) String() (fileNames string) {
 	return strings.TrimRight(fileNames, "\n  ")
 }
 
-func newFile(urlStr string) (file, error) {
-	url, err := url.Parse(urlStr)
+func newFile(url string) (file, error) {
+	u, err := neturl.Parse(url)
 	if err != nil {
 		return file{}, err
 	}
 
 	return file{
-		URL:  urlStr,
-		Name: filepath.Base(url.Path),
+		URL:  url,
+		Name: filepath.Base(u.Path),
 	}, nil
 }
