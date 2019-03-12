@@ -30,7 +30,7 @@ func getFiles() ([]file, error) {
 			continue
 		}
 
-		f, err := urlToFile(value)
+		f, err := newFile(value)
 		if err != nil {
 			return nil, err
 		}

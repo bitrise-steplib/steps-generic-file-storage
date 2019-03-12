@@ -21,7 +21,7 @@ func (fs files) String() (fileNames string) {
 	return strings.TrimRight(fileNames, "\n  ")
 }
 
-func urlToFile(urlStr string) (file, error) {
+func newFile(urlStr string) (file, error) {
 	url, err := url.Parse(urlStr)
 	if err != nil {
 		return file{}, err
