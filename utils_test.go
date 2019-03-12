@@ -37,27 +37,27 @@ func Test_isGenericKey(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "Generic_1",
+			name: "Test BITRISEIO_SAMPLE_FILE_URL generic env",
 			key:  "BITRISEIO_SAMPLE_FILE_URL",
 			want: true,
 		},
 		{
-			name: "Generic_2",
+			name: "Test BITRISEIO_PULL_REQUEST_REPOSITORY_URL generic env",
 			key:  "BITRISEIO_PULL_REQUEST_REPOSITORY_URL",
 			want: true,
 		},
 		{
-			name: "Not Generic_1",
+			name: "Test BITRISEIO_SAMPLE_FILE NON generic env",
 			key:  "BITRISEIO_SAMPLE_FILE",
 			want: false,
 		},
 		{
-			name: "NOT Generic_2",
+			name: "Test BITRISEIO_PULL_REQUEST_REPOSITORY_url NON generic env",
 			key:  "BITRISEIO_PULL_REQUEST_REPOSITORY_url",
 			want: false,
 		},
 		{
-			name: "NOT Generic_3",
+			name: "Test PULL_REQUEST_REPOSITORY_URL NON generic env",
 			key:  "PULL_REQUEST_REPOSITORY_URL",
 			want: false,
 		},
