@@ -20,10 +20,6 @@ func isIgnoredKey(key string) bool {
 
 func splitEnv(env string) (string, string) {
 	e := strings.Split(env, "=")
-
-	if len(e) == 0 {
-		return e[0], "="
-	}
 	return e[0], strings.Join(e[1:], "=")
 }
 
