@@ -10,3 +10,7 @@
 [prune]
   go-tests = true
   unused-packages = true
+
+[[constraint]]
+  name = "github.com/bitrise-steplib/bitrise-step-export-universal-apk"
+  version = "0.1.1"

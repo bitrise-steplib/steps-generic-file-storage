@@ -17,6 +17,14 @@
   revision = "2a09aab8380d7842750328aebd5671bcccea89c8"
 
 [[projects]]
+  digest = "1:dc5191789961721c888bde135057dc8ab3172489e5f7fe3e48956a248ac44f51"
+  name = "github.com/bitrise-steplib/bitrise-step-export-universal-apk"
+  packages = ["filedownloader"]
+  pruneopts = "UT"
+  revision = "a582681d23d651a5947f0c150c802872b289ad58"
+  version = "0.1.1"
+
+[[projects]]
   branch = "master"
   digest = "1:659157c334882ba37fe50584d691ea469fb6e708a49e81dcd4381fef6ba611b0"
   name = "github.com/bitrise-tools/go-steputils"
@@ -31,6 +39,7 @@
     "github.com/bitrise-io/go-utils/log",
     "github.com/bitrise-io/go-utils/pathutil",
     "github.com/bitrise-io/go-utils/sliceutil",
+    "github.com/bitrise-steplib/bitrise-step-export-universal-apk/filedownloader",
     "github.com/bitrise-tools/go-steputils/tools",
   ]
   solver-name = "gps-cdcl"
