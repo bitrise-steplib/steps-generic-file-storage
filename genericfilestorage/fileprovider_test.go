@@ -1,8 +1,53 @@
-package main
+package genericfilestorage
 
-import (
-	"testing"
-)
+import "testing"
+
+func Test_splitEnv(t *testing.T) {
+	tests := []struct {
+		name  string
+		env   string
+		want  string
+		want1 string
+	}{
+		{
+			name:  "Test valid env",
+			env:   "KEY=value",
+			want:  "KEY",
+			want1: "value",
+		},
+		{
+			name:  "Test empty env",
+			env:   "KEY=",
+			want:  "KEY",
+			want1: "",
+		},
+		{
+			name:  "Test invalid env",
+			env:   "KEY",
+			want:  "KEY",
+			want1: "",
+		},
+		{
+			name:  "Test valid env with = character in the value",
+			env:   "KEY=value=value!=val?",
+			want:  "KEY",
+			want1: "value=value!=val?",
+		},
+	}
+	provider := OsEnvFileProvider{}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := provider.splitEnv(tt.env)
+			if got != tt.want {
+				t.Errorf("splitEnv() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("splitEnv() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
 
 func Test_getFiles(t *testing.T) {
 	tests := []struct {
@@ -43,7 +88,8 @@ func Test_getFiles(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := getFiles(tt.envs)
+			provider := OsEnvFileProvider{osEnvs: tt.envs}
+			got, err := provider.GetFiles()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("getFiles() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -51,7 +97,7 @@ func Test_getFiles(t *testing.T) {
 			if len(got) != tt.want {
 				var pths []string
 				for _, f := range got {
-					pths = append(pths, f.Name)
+					pths = append(pths, f.Name())
 				}
 				t.Errorf("getFiles() returned a wrong sized file list = %v, want %v\nReturned files:\n%v", len(got), tt.want, got)
 			}
