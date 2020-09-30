@@ -65,10 +65,12 @@ func Test_getFiles(t *testing.T) {
 		{
 			name: "Test env list",
 			envs: []string{
-				"BITRISEIO_SAMPLE_FILE_URL=https://raw.githubusercontent.com/bitrise-tools/codesigndoc/master/_scripts/install_wrap.sh",
+				"BITRISEIO_SAMPLE_FILE_URL=https://concrete-userfiles-production.s3.us-west-2.amazonaws.com/project_file_storage_documents/uploads/59985/file.txt",
 				"SAMPLE_FILE_URL=",
-				"BITRISEIO_SAMPLE_FILE_URL=https://raw.githubusercontent.com/bitrise-tools/codesigndoc/master/_scripts/install_wrap.sh",
-				"BITRISEIO_SAMPLE_FILE_URL=https://raw.githubusercontent.com/bitrise-tools/codesigndoc/master/_scripts/install_wrap.sh",
+				"BITRISEIO_SAMPLE_FILE_URL=https://concrete-userfiles-production.s3.us-west-2.amazonaws.com/project_file_storage_documents/uploads/59985/file.txt",
+				"BITRISEIO_SAMPLE_FILE_URL=https://concrete-userfiles-production.s3.us-west-2.amazonaws.com/project_file_storage_documents/uploads/59985/file.txt",
+				"BITRISEIO_SAMPLE_FILE_URL=https://production.s3.us-west-2.amazonaws.com/project_file_storage_documents/uploads/59985/file.txt",
+				"BITRISEIO_SAMPLE_FILE_URL=https://concrete-userfiles-production.s3.us-west-2.amazonaws.com/uploads/59985/file.txt",
 			},
 			want:    3,
 			wantErr: false,
@@ -76,11 +78,12 @@ func Test_getFiles(t *testing.T) {
 		{
 			name: "Test env list with ignorable env",
 			envs: []string{
-				"BITRISEIO_SAMPLE_FILE_URL=https://raw.githubusercontent.com/bitrise-tools/codesigndoc/master/_scripts/install_wrap.sh",
 				"SAMPLE_FILE_URL=",
 				"BITRISEIO_PULL_REQUEST_REPOSITORY_URL=",
-				"BITRISEIO_SAMPLE_FILE_URL=https://raw.githubusercontent.com/bitrise-tools/codesigndoc/master/_scripts/install_wrap.sh",
-				"BITRISEIO_SAMPLE_FILE_URL=https://raw.githubusercontent.com/bitrise-tools/codesigndoc/master/_scripts/install_wrap.sh",
+				"BITRISEIO_SAMPLE_FILE_URL=https://concrete-userfiles-production.s3.us-west-2.amazonaws.com/project_file_storage_documents/uploads/59985/file.txt",
+				"SAMPLE_FILE_URL=",
+				"BITRISEIO_SAMPLE_FILE_URL=https://concrete-userfiles-production.s3.us-west-2.amazonaws.com/project_file_storage_documents/uploads/59985/file.txt",
+				"BITRISEIO_SAMPLE_FILE_URL=https://concrete-userfiles-production.s3.us-west-2.amazonaws.com/project_file_storage_documents/uploads/59985/file.txt",
 			},
 			want:    3,
 			wantErr: false,

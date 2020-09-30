@@ -99,6 +99,6 @@ func givenMockBulkFileDownloader() *MockBulkFileDownloader {
 
 func givenFiles() []File {
 	return []File{
-		File{name: "name", url: "http://host.com/name"},
+		{name: "name", url: "http://host.com/name"},
 	}
 }
