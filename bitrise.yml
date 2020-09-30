@@ -36,6 +36,29 @@ workflows:
           but the step would use the default value specified in the `step.yml`
           file if you would not specify another value.
         run_if: true
+        after_run:
+        - assert-outputs
+        - clear-tmp
+
+  assert-outputs:
+    steps:
+    - script:
+        title: Check outputs
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+            if [ -z "$GENERIC_FILE_STORAGE" ] ; then echo "GENERIC_FILE_STORAGE env is empty" ; exit 1 ; fi ;
+            [[ ! -f $GENERIC_FILE_STORAGE ]] && echo "$GENERIC_FILE_STORAGE does not exist" && exit 1
+            exit 0
+
+  clear-tmp:
+    steps:
+    - script:
+        title: Clear TMP
+        is_always_run: true
+        inputs:
+        - content: rm -rf $ORIG_BITRISE_SOURCE_DIR/_tmp
 
   # ----------------------------------------------------------------
   # --- Utility workflows
