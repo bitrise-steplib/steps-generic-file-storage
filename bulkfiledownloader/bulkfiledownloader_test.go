@@ -14,7 +14,7 @@ func Test_givenFileDownloaderFails_whenDowloadFilesCalled_thenExpectError(t *tes
 	mockFileDowloader := givenMockFileDownloader().
 		GivenGetFails(errors.New("sad error :("))
 	bulkdownloader := HTTPBulkFileDownloader{mockFileDowloader}
-	files := givenFiles(t)
+	files := givenFiles(t, 1)
 	target := "whatever/path"
 
 	// When
@@ -29,7 +29,7 @@ func Test_givenFileDownloaderFailsForSecondCall_whenDowloadFilesCalled_thenExpec
 	mockFileDowloader := givenMockFileDownloader().
 		GivenGetFailsForSecondCall(errors.New("sad error :("))
 	bulkdownloader := HTTPBulkFileDownloader{mockFileDowloader}
-	files := givenFiles(t)
+	files := givenFiles(t, 2)
 	target := "whatever/path"
 
 	// When
@@ -37,6 +37,7 @@ func Test_givenFileDownloaderFailsForSecondCall_whenDowloadFilesCalled_thenExpec
 
 	// Then
 	assert.Error(t, actualErr)
+	mockFileDowloader.AssertNumberOfCalls(t, "Get", 2)
 }
 
 func Test_givenFileDownloaderSucceeds_whenDowloadFilesCalled_thenExpectNoError(t *testing.T) {
@@ -44,7 +45,7 @@ func Test_givenFileDownloaderSucceeds_whenDowloadFilesCalled_thenExpectNoError(t
 	mockFileDowloader := givenMockFileDownloader().
 		GivenGetSucceed()
 	bulkdownloader := HTTPBulkFileDownloader{mockFileDowloader}
-	files := givenFiles(t)
+	files := givenFiles(t, 1)
 	target := "whatever/path"
 
 	// When
@@ -58,10 +59,12 @@ func givenMockFileDownloader() *MockFileDownloader {
 	return new(MockFileDownloader)
 }
 
-func givenFiles(t *testing.T) []genericfilestorage.File {
-	return []genericfilestorage.File{
-		givenFile(t, "http://paht.to/file"),
+func givenFiles(t *testing.T, size int) []genericfilestorage.File {
+	files := make([]genericfilestorage.File, size)
+	for i := range files {
+		files[i] = givenFile(t, "http://whatever.com/file.txt")
 	}
+	return files
 }
 
 func givenFile(t *testing.T, url string) genericfilestorage.File {

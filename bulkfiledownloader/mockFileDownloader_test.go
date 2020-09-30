@@ -24,7 +24,9 @@ func (m *MockFileDownloader) GivenGetFails(reason error) *MockFileDownloader {
 // GivenGetFailsForSecondCall ...
 func (m *MockFileDownloader) GivenGetFailsForSecondCall(reason error) *MockFileDownloader {
 	m.On("Get", mock.Anything, mock.Anything).
-		Once().Return(nil).
+		Once().Return(nil)
+
+	m.On("Get", mock.Anything, mock.Anything).
 		Once().Return(reason)
 	return m
 }
