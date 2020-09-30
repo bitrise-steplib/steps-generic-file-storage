@@ -4,7 +4,6 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/bitrise-steplib/steps-generic-file-storage/bulkfiledownloader/internal/test"
 	"github.com/bitrise-steplib/steps-generic-file-storage/genericfilestorage"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -55,8 +54,8 @@ func Test_givenFileDownloaderSucceeds_whenDowloadFilesCalled_thenExpectNoError(t
 	assert.NoError(t, actualErr)
 }
 
-func givenMockFileDownloader() *test.MockFileDownloader {
-	return new(test.MockFileDownloader)
+func givenMockFileDownloader() *MockFileDownloader {
+	return new(MockFileDownloader)
 }
 
 func givenFiles(t *testing.T) []genericfilestorage.File {

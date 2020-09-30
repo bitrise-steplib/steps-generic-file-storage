@@ -1,4 +1,4 @@
-package test
+package bulkfiledownloader
 
 import (
 	"github.com/stretchr/testify/mock"
