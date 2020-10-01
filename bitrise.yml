@@ -36,7 +36,7 @@ workflows:
           but the step would use the default value specified in the `step.yml`
           file if you would not specify another value.
         run_if: true
-        after_run:
+    after_run:
         - assert-outputs
         - clear-tmp
 
@@ -49,7 +49,7 @@ workflows:
             #!/usr/bin/env bash
             set -ex
             if [ -z "$GENERIC_FILE_STORAGE" ] ; then echo "GENERIC_FILE_STORAGE env is empty" ; exit 1 ; fi ;
-            [[ ! -f $GENERIC_FILE_STORAGE ]] && echo "$GENERIC_FILE_STORAGE does not exist" && exit 1
+            if [ ! -d "$GENERIC_FILE_STORAGE" ] ; then echo "$GENERIC_FILE_STORAGE does not exist" ; exit 1 ; fi ;
             exit 0
 
   clear-tmp:
