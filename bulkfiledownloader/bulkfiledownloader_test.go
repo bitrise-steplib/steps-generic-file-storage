@@ -11,8 +11,9 @@ import (
 
 func Test_givenFileDownloaderFails_whenDowloadFilesCalled_thenExpectError(t *testing.T) {
 	// Given
+	expectedError := givenError()
 	mockFileDowloader := givenMockFileDownloader().
-		GivenGetFails(errors.New("sad error :("))
+		GivenGetFails(expectedError)
 	bulkdownloader := HTTPBulkFileDownloader{mockFileDowloader}
 	files := givenFiles(t, 1)
 	target := "whatever/path"
@@ -21,13 +22,14 @@ func Test_givenFileDownloaderFails_whenDowloadFilesCalled_thenExpectError(t *tes
 	actualErr := bulkdownloader.DownloadFiles(files, target)
 
 	// Then
-	assert.Error(t, actualErr)
+	assert.EqualError(t, expectedError, actualErr.Error())
 }
 
 func Test_givenFileDownloaderFailsForSecondCall_whenDowloadFilesCalled_thenExpectError(t *testing.T) {
 	// Given
+	expectedError := givenError()
 	mockFileDowloader := givenMockFileDownloader().
-		GivenGetFailsForSecondCall(errors.New("sad error :("))
+		GivenGetFailsForSecondCall(expectedError)
 	bulkdownloader := HTTPBulkFileDownloader{mockFileDowloader}
 	files := givenFiles(t, 2)
 	target := "whatever/path"
@@ -36,7 +38,7 @@ func Test_givenFileDownloaderFailsForSecondCall_whenDowloadFilesCalled_thenExpec
 	actualErr := bulkdownloader.DownloadFiles(files, target)
 
 	// Then
-	assert.Error(t, actualErr)
+	assert.EqualError(t, expectedError, actualErr.Error())
 	mockFileDowloader.AssertNumberOfCalls(t, "Get", 2)
 }
 
@@ -72,4 +74,8 @@ func givenFile(t *testing.T, url string) genericfilestorage.File {
 	require.NoError(t, err)
 
 	return file
+}
+
+func givenError() error {
+	return errors.New("sad error :(")
 }

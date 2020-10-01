@@ -2,9 +2,12 @@ package genericfilestorage
 
 import (
 	"errors"
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_givenBulkDownloadFail_whenDownloadFilesCalled_thenExpectError(t *testing.T) {
@@ -12,8 +15,9 @@ func Test_givenBulkDownloadFail_whenDownloadFilesCalled_thenExpectError(t *testi
 	files := givenFiles()
 	mockFileProvider := givenMockFileProvider().
 		GivenGetFilesSucceed(files)
+	expectedError := givenError()
 	mockBulkdownloader := givenMockBulkFileDownloader().
-		GivenDownloadFilesFail(errors.New("sad error"))
+		GivenDownloadFilesFail(expectedError)
 	storage := Storage{
 		bulkdownloader: mockBulkdownloader,
 		fileprovider:   mockFileProvider,
@@ -21,10 +25,10 @@ func Test_givenBulkDownloadFail_whenDownloadFilesCalled_thenExpectError(t *testi
 	}
 
 	// When
-	path, err := storage.DownloadFiles()
+	path, actualErr := storage.DownloadFiles()
 
 	// Then
-	assert.Error(t, err)
+	assert.EqualError(t, fmt.Errorf("failed to download files, error: %s", expectedError), actualErr.Error())
 	assert.Empty(t, path)
 }
 
@@ -43,17 +47,23 @@ func Test_givenBulkDownloadSucceeds_whenDownloadFilesCalled_thenExpectNoError(t 
 
 	// When
 	path, err := storage.DownloadFiles()
+	defer func() {
+		err := os.Remove(path)
+		require.NoError(t, err)
+	}()
 
 	// Then
 	assert.NoError(t, err)
 	assert.NotEmpty(t, path)
 	assert.DirExists(t, path)
+
 }
 
 func Test_givenFileProviderFails_whenFilesToDownloadCalled_thenExpectError(t *testing.T) {
 	// Given
+	expectedError := givenError()
 	mockFileProvider := givenMockFileProvider().
-		GivenGetFilesFail(errors.New("sad error"))
+		GivenGetFilesFail(expectedError)
 	mockBulkdownloader := givenMockBulkFileDownloader()
 	storage := Storage{
 		bulkdownloader: mockBulkdownloader,
@@ -62,10 +72,10 @@ func Test_givenFileProviderFails_whenFilesToDownloadCalled_thenExpectError(t *te
 	}
 
 	// When
-	files, err := storage.filesToDownload()
+	files, actualErr := storage.filesToDownload()
 
 	// Then
-	assert.Error(t, err)
+	assert.EqualError(t, fmt.Errorf("failed to fetch file list, error: %s", expectedError), actualErr.Error())
 	assert.Nil(t, files)
 }
 
@@ -101,4 +111,8 @@ func givenFiles() []File {
 	return []File{
 		{name: "name", url: "http://host.com/name"},
 	}
+}
+
+func givenError() error {
+	return errors.New("sad error :(")
 }

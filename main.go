@@ -55,7 +55,7 @@ func main() {
 
 	storageDir, err := storage.DownloadFiles()
 	if err != nil {
-		failf("%s", "az")
+		failf("Failed to download files, error: %s", err)
 	}
 
 	if err := tools.ExportEnvironmentWithEnvman(genericFileStorageEnv, storageDir); err != nil {
