@@ -1,8 +1,16 @@
-title: Generic File Storage
-summary: The step will download all your files you uploaded in the GENERIC FILE STORAGE section of the Code Signing tab in your Workflow Editor.
-description: |
-  The step will download all your files you uploaded in the GENERIC FILE STORAGE section of the Code Signing tab in your Workflow Editor with the same name, under `$GENERIC_FILE_STORAGE` path.
-  As an example, if you upload `myconfig.ini` to GENERIC FILE STORAGE, then the step will download it and it will be available as `$GENERIC_FILE_STORAGE/myconfig.ini`
+title: "Generic File Storage"
+summary: Download all files you uploaded in the **GENERIC FILE STORAGE** section of the Code Signing tab in your Workflow Editor.
+description: |-
+  This Step downloads all files you uploaded in the **GENERIC FILE STORAGE** section of the Code Signing tab in your Workflow Editor with the same name, under `$GENERIC_FILE_STORAGE` path.
+  For example, if you upload the `myconfig.ini` file to **GENERIC FILE STORAGE**, then the Step will download it and it will be available as `$GENERIC_FILE_STORAGE/myconfig.ini`
+
+  ### Configuring the Step
+
+  1. Enable or disable the **Debug mode**.
+
+  ### Useful links
+  - [Managing files in Generic File Storage](https://devcenter.bitrise.io/api/managing-files-in-generic-file-storage/)
+
 website: https://github.com/bitrise-steplib/steps-generic-file-storage
 source_code_url: https://github.com/bitrise-steplib/steps-generic-file-storage
 support_url: https://github.com/bitrise-steplib/steps-generic-file-storage/issues
@@ -21,9 +29,8 @@ inputs:
   - enable_debug: "false"
     opts:
       category: Debug
-      title: "Enable debug mode"
-      description: |
-        Enables debug mode. If this input is active, the log of the step will contain more information for easier debugging.
+      title: "Enable debug mode?"
+      summary: "Enable or disable debug mode. If it is enabled then the log of the Step will contain more information for easier debugging."
       is_required: true
       is_expand: false
       value_options:
@@ -33,6 +40,5 @@ inputs:
 outputs:
   - GENERIC_FILE_STORAGE:
     opts:
-      title: "Generic File Storage Path"
+      title: "Generic File Storage path"
       summary: Path to the files in GENERIC FILE STORAGE.
-      description: Path to the files in Generic File Storage.
