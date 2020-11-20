@@ -1,7 +1,7 @@
 title: "Generic File Storage"
 summary: Download all files you uploaded in the **GENERIC FILE STORAGE** section of the Code Signing tab in your Workflow Editor.
 description: |-
-  This Step downloads all files you uploaded in the **GENERIC FILE STORAGE** section of the Code Signing tab in your Workflow Editor with the same name, under `$GENERIC_FILE_STORAGE` path.
+  This Step downloads all files you uploaded in the **GENERIC FILE STORAGE** section of the **Code Signing** tab in your Workflow Editor with the same name, under `$GENERIC_FILE_STORAGE` path.
   For example, if you upload the `myconfig.ini` file to **GENERIC FILE STORAGE**, then the Step will download it and it will be available as `$GENERIC_FILE_STORAGE/myconfig.ini`
 
   ### Configuring the Step
