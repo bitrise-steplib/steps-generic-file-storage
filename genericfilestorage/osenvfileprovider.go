@@ -73,7 +73,7 @@ func (provider OsEnvFileProvider) shouldHandle(key, url string) bool {
 func (provider OsEnvFileProvider) isValidURL(rawURL string) bool {
 	parsedURL, err := url.ParseRequestURI(rawURL)
 	if err != nil {
-		log.Printf("Failed to parse URL: %s. %s", rawURL, err)
+		log.Printf("Failed to parse URL: %s", rawURL)
 		return false
 	}
 
