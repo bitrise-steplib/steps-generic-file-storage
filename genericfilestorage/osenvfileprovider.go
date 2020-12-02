@@ -65,27 +65,29 @@ func (provider OsEnvFileProvider) isIgnoredKey(key string) bool {
 
 func (provider OsEnvFileProvider) shouldHandle(key, url string) bool {
 	validKey := provider.isGenericKey(key) && !provider.isIgnoredKey(key)
-	validURL := provider.isValidURL(url)
+	if !validKey {
+		return false
+	}
 
-	return validKey && validURL
+	return provider.isValidURL(url)
 }
 
 func (provider OsEnvFileProvider) isValidURL(rawURL string) bool {
 	parsedURL, err := url.ParseRequestURI(rawURL)
 	if err != nil {
-		log.Printf("Failed to parse URL: %s", rawURL)
+		log.Debugf("Failed to parse URL: %s", rawURL)
 		return false
 	}
 
 	containsHost := strings.Contains(parsedURL.Host, awsHostPart)
 	if !containsHost {
-		log.Warnf("URL: %s missing required host part.", rawURL)
+		log.Debugf("URL: %s missing required host part.", rawURL)
 		return false
 	}
 
 	conatinsPath := strings.Contains(parsedURL.Path, awsPathPart)
 	if !conatinsPath {
-		log.Warnf("URL: %s missing required path part.", rawURL)
+		log.Debugf("URL: %s missing required path part.", rawURL)
 		return false
 	}
 
