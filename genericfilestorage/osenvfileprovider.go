@@ -65,15 +65,16 @@ func (provider OsEnvFileProvider) isIgnoredKey(key string) bool {
 
 func (provider OsEnvFileProvider) shouldHandle(key, url string) bool {
 	validKey := provider.isGenericKey(key) && !provider.isIgnoredKey(key)
-	validURL := provider.isValidURL(url)
-
-	return validKey && validURL
+	if !validKey {
+		return false
+	}
+	return provider.isValidURL(key, url)
 }
 
-func (provider OsEnvFileProvider) isValidURL(rawURL string) bool {
+func (provider OsEnvFileProvider) isValidURL(key, rawURL string) bool {
 	parsedURL, err := url.ParseRequestURI(rawURL)
 	if err != nil {
-		log.Printf("Failed to parse URL: %s. %s", rawURL, err)
+		log.Printf("Failed to parse URL: %s: %s. %s", key, rawURL, err.(*url.Error).Unwrap())
 		return false
 	}
 
