@@ -43,7 +43,6 @@ workflows:
             #!/usr/bin/env bash  
 
             RUN_OUTPUT=$(go run ..)
-            echo $RUN_OUTPUT
             envman add --key RUN_OUTPUT --value "$RUN_OUTPUT"
     after_run:
         - assert-outputs
