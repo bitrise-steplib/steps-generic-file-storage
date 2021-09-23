@@ -28,14 +28,22 @@ workflows:
         inputs:
         - path: ./_tmp
         - is_create_path: true
-    - path::./:
-        title: Step Test
-        description: |-
-          The example input has a default value,
-          you can overwrite it if you want to, just like we did below,
-          but the step would use the default value specified in the `step.yml`
-          file if you would not specify another value.
-        run_if: true
+    - script:
+        title: Generate secrets
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash  
+            set -ex
+
+            cp ../test/test.bitrise.secrets.yml ../.bitrise.secrets.yml
+    - script:
+        title: Run test
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash  
+
+            RUN_OUTPUT=$(go run ..)
+            envman add --key RUN_OUTPUT --value "$RUN_OUTPUT"
     after_run:
         - assert-outputs
         - clear-tmp
@@ -47,10 +55,14 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            set -ex
+
             if [ -z "$GENERIC_FILE_STORAGE" ] ; then echo "GENERIC_FILE_STORAGE env is empty" ; exit 1 ; fi ;
             if [ ! -d "$GENERIC_FILE_STORAGE" ] ; then echo "$GENERIC_FILE_STORAGE does not exist" ; exit 1 ; fi ;
-            exit 0
+
+            if [[ $RUN_OUTPUT == *"SUPER SECRET"* ]]; then
+              echo "Secret was printed!"
+              exit 1
+            fi
 
   clear-tmp:
     steps:
@@ -58,7 +70,10 @@ workflows:
         title: Clear TMP
         is_always_run: true
         inputs:
-        - content: rm -rf $ORIG_BITRISE_SOURCE_DIR/_tmp
+        - content: |-
+            rm -rf $ORIG_BITRISE_SOURCE_DIR/_tmp
+
+            rm -f $ORIG_BITRISE_SOURCE_DIR/.bitrise.secrets.yml
 
   # ----------------------------------------------------------------
   # --- Utility workflows
