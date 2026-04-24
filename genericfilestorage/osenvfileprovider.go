@@ -2,11 +2,10 @@ package genericfilestorage
 
 import (
 	"net/url"
+	"slices"
 	"strings"
 
 	"github.com/bitrise-io/go-utils/log"
-
-	"github.com/bitrise-io/go-utils/sliceutil"
 )
 
 const (
@@ -60,7 +59,7 @@ func (provider OsEnvFileProvider) isGenericKey(key string) bool {
 }
 
 func (provider OsEnvFileProvider) isIgnoredKey(key string) bool {
-	return sliceutil.IsStringInSlice(key, ignoredKeys)
+	return slices.Contains(ignoredKeys, key)
 }
 
 func (provider OsEnvFileProvider) shouldHandle(key, url string) bool {
